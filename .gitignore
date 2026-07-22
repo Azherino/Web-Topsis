@@ -1,0 +1,21 @@
+# Dependency directories
+node_modules/
+
+# OS metadata files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+
+# Dataset Files (Excel / XLSX)
+Data_Penilaian_Karyawan_RPH_108.xlsx
+*.xlsx
+*.xls
+*.csv
+
+# Project Specification & Documentation Files
+spesifikasitxt.txt
+SPK_TOPSIS_ProjectDocs.md
+docs/

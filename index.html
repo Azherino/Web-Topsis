@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Sistem Pendukung Keputusan Karyawan Terbaik menggunakan Metode TOPSIS — Rumah Pemotongan Hewan (RPH)">
+  <title>SPK Karyawan Terbaik — Metode TOPSIS | RPH</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts (preconnect + link for performance) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ═══════════ LOGIN CONTAINER ═══════════ -->
+  <div id="login-wrapper" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <img class="login-logo" src="assets/logo.png" alt="Logo RPH">
+        <h2>SPK Karyawan Terbaik</h2>
+        <p>Rumah Pemotongan Hewan (RPH)</p>
+      </div>
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="login-username" class="form-input" placeholder="Masukkan username" required
+            autocomplete="username">
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="Masukkan password" required
+            autocomplete="current-password">
+        </div>
+        <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%;justify-content:center">
+          Masuk ke Sistem
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><img src="assets/logo.png" alt="Logo RPH"></div>
+      <div>
+        <div class="brand-title">SPK TOPSIS</div>
+        <div class="brand-subtitle">Karyawan Terbaik RPH</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- Menu Utama -->
+      <div class="nav-section">Menu Utama</div>
+      <div class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </div>
+
+      <!-- Data Master -->
+      <div class="nav-section">Data Master</div>
+      <div class="nav-item" data-page="user">
+        <span class="nav-icon">👤</span>
+        <span class="nav-text">Kelola Data User</span>
+      </div>
+      <div class="nav-item" data-page="karyawan">
+        <span class="nav-icon">🗃️</span>
+        <span class="nav-text">Kelola Data Karyawan</span>
+      </div>
+      <div class="nav-item" data-page="kriteria">
+        <span class="nav-icon">📋</span>
+        <span class="nav-text">Kelola Data Kriteria</span>
+      </div>
+
+      <!-- Proses TOPSIS -->
+      <div class="nav-section">Proses TOPSIS</div>
+      <div class="nav-item" data-page="input-nilai">
+        <span class="nav-icon">✏️</span>
+        <span class="nav-text">Input Nilai Penilaian</span>
+      </div>
+      <div class="nav-item" data-page="normalisasi">
+        <span class="nav-icon">📐</span>
+        <span class="nav-text">Proses Normalisasi</span>
+      </div>
+      <div class="nav-item" data-page="perhitungan">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">Perhitungan TOPSIS</span>
+      </div>
+      <div class="nav-item" data-page="preferensi">
+        <span class="nav-icon">📈</span>
+        <span class="nav-text">Nilai Preferensi</span>
+      </div>
+
+      <!-- Hasil -->
+      <div class="nav-section">Hasil</div>
+      <div class="nav-item" data-page="ranking">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-text">Hasil Perangkingan</span>
+      </div>
+      <div class="nav-item" data-page="laporan">
+        <span class="nav-icon">🖨️</span>
+        <span class="nav-text">Cetak Laporan</span>
+      </div>
+      <!-- Aksi -->
+      <div class="nav-section">Sistem</div>
+      <div class="nav-item" id="nav-logout">
+        <span class="nav-icon">🚪</span>
+        <span class="nav-text">Keluar</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="color:rgba(255,255,255,.4);font-size:11px;text-align:center">
+        SPK TOPSIS v2.0<br>RPH &copy; 2025
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN CONTENT ═══════════ -->
+  <div id="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger">☰</button>
+        <span id="topbar-title" class="topbar-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span style="font-size:12px;color:var(--text-muted)">Metode TOPSIS</span>
+      </div>
+    </header>
+
+    <!-- Page Sections -->
+    <section id="page-dashboard" class="page active"></section>
+    <section id="page-user" class="page"></section>
+    <section id="page-karyawan" class="page"></section>
+    <section id="page-kriteria" class="page"></section>
+    <section id="page-input-nilai" class="page"></section>
+    <section id="page-normalisasi" class="page"></section>
+    <section id="page-perhitungan" class="page"></section>
+    <section id="page-preferensi" class="page"></section>
+    <section id="page-ranking" class="page"></section>
+    <section id="page-laporan" class="page"></section>
+  </div>
+
+  <!-- ═══════════ GLOBAL MODAL ═══════════ -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+        <button id="modal-confirm" class="btn btn-primary">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ JAVASCRIPT ═══════════ -->
+  <!-- Core -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/topsis.js"></script>
+
+  <!-- Page Modules -->
+  <script src="assets/js/pages/dashboard.js"></script>
+  <script src="assets/js/pages/user.js"></script>
+  <script src="assets/js/pages/karyawan.js"></script>
+  <script src="assets/js/pages/kriteria.js"></script>
+  <script src="assets/js/pages/input-nilai.js"></script>
+  <script src="assets/js/pages/normalisasi.js"></script>
+  <script src="assets/js/pages/perhitungan.js"></script>
+  <script src="assets/js/pages/preferensi.js"></script>
+  <script src="assets/js/pages/ranking.js"></script>
+  <script src="assets/js/pages/laporan.js"></script>
+
+  <!-- App Entry Point (must be last) -->
+  <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>

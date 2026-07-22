@@ -1,0 +1,135 @@
+========================================================================
+             TUTORIAL RUNNING & PENGGUNAAN APLIKASI SPK TOPSIS
+                      (RUMAH PEMOTONGAN HEWAN - RPH)
+========================================================================
+
+Halo! File ini berisi panduan praktis untuk menginstal, menjalankan, dan 
+menggunakan aplikasi Sistem Pendukung Keputusan (SPK) Pemilihan Karyawan 
+Terbaik dengan Metode TOPSIS. Silakan ikuti langkah-langkah di bawah ini.
+
+------------------------------------------------------------------------
+1. KEBUTUHAN SISTEM (SYSTEM REQUIREMENTS)
+------------------------------------------------------------------------
+Sebelum memulai, pastikan komputer Anda sudah terinstal:
+- XAMPP (rekomendasi versi dengan PHP 7.4 ke atas)
+- Browser modern (Google Chrome, Firefox, Microsoft Edge, dll)
+
+------------------------------------------------------------------------
+2. PETUNJUK INSTALASI & SETUP DATABASE
+------------------------------------------------------------------------
+Langkah A: Memindahkan Folder Project
+1. Ekstrak file zip/folder project ini.
+2. Salin (copy) folder "Web-Topsis" dan letakkan ke dalam folder htdocs XAMPP Anda.
+   Biasanya di: C:\xampp\htdocs\
+
+Langkah B: Mengimpor Database MySQL
+1. Jalankan aplikasi XAMPP Control Panel.
+2. Klik tombol "Start" pada bagian Apache dan MySQL.
+3. Buka browser, lalu akses alamat: http://localhost/phpmyadmin/
+4. Buat database baru:
+   - Klik menu "New" di sisi kiri.
+   - Ketikkan Nama Database: spk_rph
+   - Klik tombol "Create" (Buat).
+5. Impor file SQL:
+   - Klik database "spk_rph" yang baru dibuat di sisi kiri.
+   - Klik tab "Import" di bagian atas halaman.
+   - Klik tombol "Choose File" (Pilih File) dan arahkan ke file database:
+     htdocs\Web-Topsis\database\spk_rph.sql
+   - Gulir ke bawah halaman dan klik tombol "Import" (atau "Go").
+   - Tunggu hingga muncul notifikasi sukses berwarna hijau.
+
+Langkah C: Konfigurasi Database PHP (Optional)
+Secara default database dikonfigurasi tanpa password. Jika MySQL Anda memiliki 
+password custom, buka file berikut di text editor (VS Code, Notepad, dll):
+  htdocs\Web-Topsis\api\config\db.php
+Lalu sesuaikan username ('root') dan password ('') sesuai setting PC Anda.
+
+------------------------------------------------------------------------
+3. CARA MENJALANKAN APLIKASI
+------------------------------------------------------------------------
+Ada 2 cara untuk membuka aplikasi di browser Anda:
+
+CARA A: Menggunakan localhost XAMPP (Sangat Direkomendasikan)
+- Pastikan Apache dan MySQL di XAMPP masih berjalan ("Start").
+- Buka browser, lalu ketikkan URL berikut di address bar:
+  http://localhost/Web-Topsis/index.html
+- Tekan Enter. Halaman Login akan terbuka.
+
+CARA B: Menggunakan PHP CLI Built-in Server
+- Buka Command Prompt (cmd) atau Terminal.
+- Masuk ke direktori project dengan mengetik:
+  cd C:\xampp\htdocs\Web-Topsis
+- Jalankan server PHP:
+  php -S localhost:8000
+- Buka browser dan buka alamat: http://localhost:8000
+
+------------------------------------------------------------------------
+4. DETAIL KREDENSIAL LOGIN
+------------------------------------------------------------------------
+Untuk masuk ke sistem sebagai Administrator:
+- Username : admin
+- Password : admin123
+*Setelah login berhasil, Anda akan dialihkan ke halaman Dashboard Utama.
+
+------------------------------------------------------------------------
+5. ALUR KERJA PENGGUNAAN APLIKASI
+------------------------------------------------------------------------
+Untuk melakukan penilaian karyawan baru dan mendapatkan ranking TOPSIS:
+
+Langkah 1: Kelola Data Karyawan (Menu: Kelola Data Karyawan)
+- Di sini Anda bisa Menambah Karyawan baru, Mengedit, atau Menghapus.
+- Default project sudah berisi 108 karyawan sebagai data uji awal.
+
+Langkah 2: Kelola Kriteria & Bobot (Menu: Kelola Data Kriteria)
+- Terdapat 8 kriteria bawaan RPH (C1 - C8) dengan tipe benefit.
+- Jika Anda mengedit bobot kriteria, pastikan total dari seluruh 
+  bobot kriteria berjumlah TEPAT 1.00 (misalnya 0.20 + 0.18 + ... = 1.00).
+- Sistem akan memvalidasi otomatis dan menolak jika total bobot tidak sama dengan 1.00.
+
+Langkah 3: Input Nilai Penilaian (Menu: Input Nilai Penilaian)
+- Pilih periode tahun-bulan (misal: 2026-07).
+- Masukkan nilai setiap karyawan pada kriteria C1 sampai C8 (rentang nilai 0 - 100).
+- Catatan Penting: Agar perhitungan TOPSIS bisa dijalankan, SELURUH karyawan 
+  aktif wajib memiliki nilai penilaian pada periode tersebut.
+- Data yang sudah dimasukkan akan tersimpan secara real-time ke database.
+
+Langkah 4: Jalankan Perhitungan TOPSIS (Menu: Hasil Perangkingan)
+- Buka menu "Hasil Perangkingan" atau klik "Proses Perhitungan".
+- Pilih periode penilaian yang ingin dihitung.
+- Sistem akan menghitung seluruh tahap TOPSIS (Normalisasi, Pembobotan, 
+  Solusi Ideal Positif/Negatif, Jarak Ideal, dan Nilai Preferensi).
+- Hasil akhir berupa daftar peringkat karyawan dari tertinggi ke terendah akan tampil.
+- Pemenang (Karyawan Terbaik) akan di-highlight di baris paling atas.
+- Untuk melihat langkah perhitungan matematika secara detail dan transparan, 
+  buka menu:
+  * Proses Normalisasi (Melihat Matriks Awal & Matriks Ternormalisasi R)
+  * Perhitungan TOPSIS (Melihat Matriks Terbobot Y & Solusi Ideal A+/A-)
+  * Nilai Preferensi (Melihat Jarak D+/D- dan Nilai Preferensi V)
+
+Langkah 5: Cetak Laporan & Download PDF (Menu: Cetak Laporan)
+- Pilih jenis laporan yang ingin dicetak:
+  1. Laporan Data Karyawan (Format Portrait)
+  2. Laporan Data Kriteria & Bobot (Format Portrait)
+  3. Laporan Matriks Penilaian (Format Landscape)
+  4. Laporan Hasil Perangkingan (Format Portrait)
+- Anda dapat melihat pratinjau (preview) laporan langsung di web.
+- Klik tombol "Generate PDF" untuk mendownload file PDF resmi lengkap dengan 
+  Kop Surat, Logo RPH, detail tabel, kesimpulan rekomendasi, dan kolom tanda tangan.
+
+------------------------------------------------------------------------
+6. TROUBLESHOOTING (SOLUSI MASALAH)
+------------------------------------------------------------------------
+- Eror: "Koneksi database gagal..."
+  -> Pastikan database MySQL di XAMPP sudah di-start.
+  -> Pastikan database "spk_rph" sudah di-import melalui phpMyAdmin.
+  -> Cek file api/config/db.php untuk mencocokkan password database Anda.
+- Eror: "Gagal memuat library PDF (jsPDF)..."
+  -> Pastikan komputer Anda terhubung ke internet saat pertama kali menggunakan 
+     fitur cetak PDF karena aplikasi mengambil library jsPDF via CDN Cloudflare.
+- Perhitungan TOPSIS tidak mau berjalan / tombol nonaktif
+  -> Periksa kembali menu "Input Nilai Penilaian". Kemungkinan ada karyawan yang 
+     nilainya masih kosong ("—"). Isi seluruh nilai terlebih dahulu.
+
+========================================================================
+     Terima kasih! Semoga aplikasi ini bermanfaat untuk rekan Anda.
+========================================================================
