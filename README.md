@@ -142,5 +142,30 @@ Berikut daftar kriteria penilaian default yang tertanam di database beserta bobo
 
 ---
 
+## 🌐 Panduan Deploy ke Vercel
+
+Aplikasi ini sudah dilengkapi dengan file `vercel.json` dan dukungan Environment Variables untuk kemudahan deployment ke **Vercel**:
+
+1. **Host Database MySQL Cloud**:
+   Karena Vercel adalah platform serverless, Anda memerlukan penyedia MySQL Cloud gratis/berbayar (seperti **PlanetScale**, **Aiven**, **Railway**, **Render**, atau **Supabase**).
+   - Buat database di provider cloud pilihan Anda.
+   - Import file [spk_rph.sql](file:///e:/Project/Web-Topsis/database/spk_rph.sql) ke database cloud tersebut.
+
+2. **Push Repository ke GitHub**:
+   Pastikan kode terbaru sudah ter-push ke repository GitHub Anda (`git push origin main`).
+
+3. **Deploy di Vercel**:
+   - Buka dashboard [Vercel](https://vercel.com) dan klik **Add New Project**.
+   - Hubungkan (*Import*) repository GitHub `Web-Topsis`.
+   - Pada bagian **Environment Variables**, tambahkan variabel koneksi database cloud Anda:
+     - `DB_HOST`: Host database cloud (misal: `gateway.aiven.io` / `mysql.railway.internal`)
+     - `DB_PORT`: Port MySQL (default: `3306`)
+     - `DB_NAME`: Nama database (misal: `spk_rph`)
+     - `DB_USER`: Username database
+     - `DB_PASS`: Password database
+   - Klik **Deploy**. Vercel akan memproses routing secara otomatis melalui `vercel.json`.
+
+---
+
 ## 📝 Lisensi
 Aplikasi ini dikembangkan untuk kebutuhan internal akademis / riset evaluasi kinerja karyawan RPH. Anda bebas memodifikasi dan mendistribusikannya kembali.

@@ -130,6 +130,26 @@ Langkah 5: Cetak Laporan & Download PDF (Menu: Cetak Laporan)
   -> Periksa kembali menu "Input Nilai Penilaian". Kemungkinan ada karyawan yang 
      nilainya masih kosong ("—"). Isi seluruh nilai terlebih dahulu.
 
+------------------------------------------------------------------------
+7. CARA DEPLOY KE VERCEL (ONLINE CLOUD)
+------------------------------------------------------------------------
+Aplikasi ini sudah dikonfigurasi bersih (Scenario C) dan siap dideploy ke Vercel:
+
+1. Host Database Cloud:
+   - Gunakan layanan MySQL cloud gratis/berbayar (misal: Railway, Aiven, Render, dll).
+   - Import file `database/spk_rph.sql` ke database cloud tersebut.
+
+2. Deploy di Vercel:
+   - Push repository ke GitHub (`git push origin main`).
+   - Buka Vercel.com -> Add New Project -> Import repo `Web-Topsis`.
+   - Pada bagian Environment Variables di Vercel, isi:
+     * DB_HOST = host_database_cloud
+     * DB_PORT = 3306
+     * DB_NAME = spk_rph
+     * DB_USER = user_database_cloud
+     * DB_PASS = password_database_cloud
+   - Klik Deploy. Berkas `vercel.json` akan otomatis mengatur routing serverless PHP.
+
 ========================================================================
      Terima kasih! Semoga aplikasi ini bermanfaat untuk rekan Anda.
 ========================================================================

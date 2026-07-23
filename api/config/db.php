@@ -1,15 +1,23 @@
 <?php
 // ─────────────────────────────────────────
 // Konfigurasi Database PDO — SPK RPH
+// Mendukung Environment Variables (Vercel/Cloud & XAMPP Local)
 // ─────────────────────────────────────────
 
 function getDB() {
     static $pdo = null;
     if ($pdo === null) {
         try {
+            $host   = getenv('DB_HOST')   ?: (getenv('MYSQL_HOST')     ?: (getenv('MYSQLHOST')     ?: 'localhost'));
+            $port   = getenv('DB_PORT')   ?: (getenv('MYSQL_PORT')     ?: (getenv('MYSQLPORT')     ?: '3306'));
+            $dbname = getenv('DB_NAME')   ?: (getenv('MYSQL_DATABASE') ?: (getenv('MYSQLDATABASE') ?: 'spk_rph'));
+            $user   = getenv('DB_USER')   ?: (getenv('MYSQL_USER')     ?: (getenv('MYSQLUSER')     ?: 'root'));
+            $pass   = getenv('DB_PASS') !== false ? getenv('DB_PASS')  : (getenv('MYSQL_PASSWORD') !== false ? getenv('MYSQL_PASSWORD') : (getenv('MYSQLPASSWORD') !== false ? getenv('MYSQLPASSWORD') : ''));
+
             $pdo = new PDO(
-                'mysql:host=localhost;dbname=spk_rph;charset=utf8mb4',
-                'root', '',
+                "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4",
+                $user,
+                $pass,
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
