@@ -380,6 +380,16 @@ const PageLaporan = {
     doc.text('Administrator', 160, sigY + 36, { align: 'center' });
   },
 
+  checkPageOverflow(doc, neededHeight, currentY, isLandscape = false) {
+    const pageHeight = isLandscape ? 210 : 297;
+    const margin = 20;
+    if (currentY + neededHeight > pageHeight - margin) {
+      doc.addPage();
+      return 25; // Reset Y position on the new page
+    }
+    return currentY;
+  },
+
   // ── PDF: Data Karyawan ──
   pdfKaryawan() {
     const JsPDF = this.getJsPDF();
@@ -406,7 +416,8 @@ const PageLaporan = {
       columnStyles: { 0: { halign: 'center', cellWidth: 12 } }
     });
 
-    const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 20 : 120;
+    let finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 15 : 120;
+    finalY = this.checkPageOverflow(doc, 45, finalY, false);
     this.addPDFSignatures(doc, finalY);
     this.downloadPDF(doc, `Laporan_Data_Karyawan.pdf`);
   },
@@ -446,7 +457,8 @@ const PageLaporan = {
       }
     });
 
-    const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 10 : 120;
+    let finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 10 : 120;
+    finalY = this.checkPageOverflow(doc, 70, finalY, false);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.text('Keterangan:', 15, finalY);
@@ -526,7 +538,8 @@ const PageLaporan = {
     });
 
     // Keterangan kriteria
-    const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 10 : 120;
+    let finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 10 : 120;
+    finalY = this.checkPageOverflow(doc, 95, finalY, true);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
     doc.text('Keterangan Kriteria:', 15, finalY);
@@ -581,7 +594,8 @@ const PageLaporan = {
       }
     });
 
-    const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 12 : 120;
+    let finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY + 12 : 120;
+    finalY = this.checkPageOverflow(doc, 76, finalY, false);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text('Kesimpulan:', 15, finalY);
@@ -590,7 +604,7 @@ const PageLaporan = {
     doc.text(`sebesar ${parseFloat(winner.preferensi).toFixed(4)} dan direkomendasikan sebagai`, 15, finalY + 14);
     doc.text(`karyawan terbaik periode ${this.periode}.`, 15, finalY + 20);
 
-    this.addPDFSignatures(doc, finalY + 40);
+    this.addPDFSignatures(doc, finalY + 36);
     this.downloadPDF(doc, `Laporan_SPK_${this.periode}.pdf`);
   }
 };
